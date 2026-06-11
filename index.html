@@ -759,7 +759,7 @@ function renderPreview(doc){
               ${esMant(tipo)&&doc.frecuencia?`<div class="doc-fila"><span class="k">Frecuencia</span><span class="v">${doc.frecuencia}</span></div>`:''}
               ${!esMant(tipo)&&doc.tipo_mant?`<div class="doc-fila"><span class="k">Tipo serv.</span><span class="v">${doc.tipo_mant}</span></div>`:''}
               ${!esMant(tipo)&&doc.desc_falla?`<div class="doc-fila"><span class="k">Falla</span><span class="v">${doc.desc_falla}</span></div>`:''}
-              <div class="doc-fila"><span class="k">${esMant(tipo)?'Fecha':'Fecha doc.'}</span><span class="v">${fmtF(doc.fecha_doc)}</span></div>
+              ${esMant(tipo)?`<div class="doc-fila"><span class="k">Fecha</span><span class="v">${fmtF(doc.fecha_doc)}</span></div>`:''}
             </div>
           </div>
         </div>
@@ -776,13 +776,12 @@ function renderPreview(doc){
           ${doc.obs?`<div style="margin-bottom:8px"><div style="font-size:10px;font-weight:700;color:var(--txs);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Observaciones</div><div class="doc-detalle">${doc.obs}</div></div>`:''}
         `:''}
 
-        <!-- FIRMAS: estilo PDF referencia -->
+        <!-- FIRMAS -->
         <div class="firmas-seccion">
           <!-- Izquierda: cliente -->
           <div class="firma-bloque">
             <div class="firma-canvas-wrap">
               <canvas id="firmaCanvas" width="280" height="90"></canvas>
-              <button class="btn-limpiar" onclick="limpiarFirma()">Limpiar</button>
             </div>
             <div class="firma-linea"></div>
             <input class="firma-nombre-input" id="iNombreFirmante" type="text" placeholder="NOMBRE ENCARGADO">
@@ -791,10 +790,9 @@ function renderPreview(doc){
           <!-- Derecha: técnico con firma y timbre embebidos -->
           <div class="firma-bloque">
             <div class="firma-tec-wrap">
-              <div class="firma-nombre-bold" style="font-size:12px;font-weight:700;text-align:center;text-transform:uppercase;margin-bottom:6px">${tec}</div>
               <div style="display:flex;align-items:center;justify-content:center;gap:12px">
-                <img style="max-height:55px;max-width:120px;object-fit:contain;mix-blend-mode:multiply" src="${firma}" alt="Firma">
-                <img style="max-height:50px;max-width:110px;object-fit:contain;mix-blend-mode:multiply;opacity:.9" src="${timbre}" alt="Timbre">
+                <img style="max-height:55px;max-width:120px;object-fit:contain;mix-blend-mode:multiply;filter:invert(1)" src="${firma}" alt="Firma">
+                <img style="max-height:50px;max-width:110px;object-fit:contain;mix-blend-mode:multiply;filter:invert(1);opacity:.9" src="${timbre}" alt="Timbre">
               </div>
             </div>
             <div class="firma-linea"></div>
