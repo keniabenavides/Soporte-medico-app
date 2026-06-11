@@ -946,7 +946,7 @@ async function guardar(){
     const pdfBlob=await html2pdf().set({
       margin:[6,6,6,6],filename:`${LABEL_A[doc.tipo]} N°${num}.pdf`,
       image:{type:'jpeg',quality:0.95},
-      html2canvas:{scale:2,useCORS:true,logging:false,scrollY:0,scrollX:0,windowWidth:900},
+      html2canvas:{scale:2,useCORS:true,logging:false,scrollY:0,scrollX:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
       pagebreak:{mode:['css','legacy']}
     }).from(el).outputPdf('blob');
