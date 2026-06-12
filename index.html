@@ -106,14 +106,14 @@ button{cursor:pointer;font-family:inherit}
 .doc-sec.sm{color:#fff;background:var(--az);border-color:var(--az)}
 .doc-sec.cg{color:#fff;background:var(--tl);border-color:var(--tl)}
 .doc-sec.mant{color:#fff;background:var(--na);border-color:var(--na)}
-.doc-detalle{background:var(--gr);border-radius:0 0 6px 6px;padding:10px 12px;margin-bottom:6px;font-size:13px;line-height:1.6;border:1px solid var(--grb);border-top:none}
+.doc-detalle{background:var(--gr);border-radius:0 0 6px 6px;padding:10px 12px;margin-bottom:6px;font-size:13px;line-height:1.6;border:1px solid var(--grb);border-top:none;word-break:break-word;overflow-wrap:break-word}
 /* Tabla ítems cotización - como PDF referencia */
 .doc-items{width:100%;border-collapse:collapse;margin-bottom:0;font-size:12px}
 .doc-items thead tr{border-bottom:2px solid}
 .doc-items.sm thead tr{background:var(--az);border-color:var(--az)}
 .doc-items.cg thead tr{background:var(--tl);border-color:var(--tl)}
 .doc-items th{color:#fff;padding:7px 10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
-.doc-items td{padding:7px 10px;border-bottom:1px solid var(--grb);font-size:12px;vertical-align:top}
+.doc-items td{padding:7px 10px;border-bottom:1px solid var(--grb);font-size:12px;vertical-align:top;word-break:break-word;overflow-wrap:break-word}
 .doc-items td.amt{text-align:right;font-weight:600;white-space:nowrap}
 .doc-items tr.sub-row td{background:#f9fafb;font-size:11px;color:var(--txs)}
 .doc-items tr.tot-row td{font-size:13px;font-weight:700;border-top:2px solid;border-bottom:none;background:var(--gr)}
@@ -139,7 +139,7 @@ button{cursor:pointer;font-family:inherit}
 /* Tabla resumen mantención */
 .resumen-tabla{width:100%;border-collapse:collapse;margin-bottom:8px;font-size:12px}
 .resumen-tabla th{color:#fff;padding:6px 10px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase}
-.resumen-tabla td{padding:6px 10px;border-bottom:1px solid var(--grb);vertical-align:top;font-size:12px}
+.resumen-tabla td{padding:6px 10px;border-bottom:1px solid var(--grb);vertical-align:top;font-size:12px;word-break:break-word;overflow-wrap:break-word}
 .resumen-tabla td:first-child{width:60px;text-align:center;font-size:14px}
 /* FIRMAS - estilo PDF referencia */
 .firmas-seccion{margin-top:24px;padding-top:20px;border-top:2px solid var(--grb);display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end}
@@ -522,10 +522,9 @@ function renderFormCot(tipo){
       </div>
       <button class="btn-add-sm" onclick="addItem()">+ Agregar ítem</button>
       <div class="campo-row" style="margin-top:12px">
-        <div class="campo"><label>Total Honorarios (CLP)</label><input type="number" id="iHon" style="text-align:right" placeholder="0" oninput="calcCG()"></div>
+        <div class="campo"><label>Tipo de Pago</label><select id="iTipoPago"><option>Boleta</option><option>Factura</option></select></div>
         <div class="campo"><label>Retención (%)</label><input type="number" id="iRetPct" value="14.5" step="0.1" oninput="calcCG()"></div>
       </div>
-      <div class="campo"><label>Tipo de Pago</label><select id="iTipoPago"><option>Boleta</option><option>Factura</option></select></div>
       <table class="monto-tabla"><tr><td class="lbl">Total honorario</td><td class="val" id="cHon">$ 0</td></tr>
         <tr><td class="lbl">Retención</td><td class="val" id="cRet">$ 0</td></tr>
         <tr class="tot"><td>Total a recibir</td><td class="val" id="cTotCG">$ 0</td></tr></table>
@@ -768,7 +767,7 @@ function renderPreview(doc){
 
   const metaTitCls='doc-meta-tit '+hdrCls;
   const BANCO_SM=`<div class="doc-banco"><strong>Datos de pago</strong>Cuenta: Chequera electrónica Banco Estado N° 38172176582<br>Nombre: Soporte Médico&amp;Dental SPA · RUT: 77.009.054-7<br>Email: equipos.medic@gmail.com<br><em style="font-size:10px;color:var(--txs)">Validez cotización: 15 días desde emisión</em></div>`;
-  const BANCO_CG=`<div class="doc-banco"><strong>Datos de pago</strong>Boleta de honorarios a nombre de:<br>Carlos Guzmán Palma · RUT: 10.654.075-6<br>Email: equipos.medic@gmail.com</div>`;
+  const BANCO_CG=`<div class="doc-banco"><strong>Datos de pago</strong>Cuenta corriente BancoEstado N° 38100137680<br>Carlos Guzmán Palma · RUT: 10.654.075-6<br>Email: equipos.medic@gmail.com<br><em style="font-size:10px;color:var(--txs)">Validez: 15 días desde emisión</em></div>`;
 
   document.getElementById('pgPrev').innerHTML=`
   <div class="preview-page">
@@ -838,9 +837,7 @@ function renderPreview(doc){
         <div class="firmas-seccion">
           <!-- Izquierda: cliente -->
           <div class="firma-bloque">
-            <div class="firma-canvas-wrap">
-              <canvas id="firmaCanvas" width="280" height="90"></canvas>
-            </div>
+            <canvas id="firmaCanvas" width="280" height="90" style="background:#fff;border-radius:4px;touch-action:none;cursor:crosshair;width:100%;height:90px;border:1px solid var(--grb)"></canvas>
             <div class="firma-linea"></div>
             <input class="firma-nombre-input" id="iNombreFirmante" type="text" placeholder="NOMBRE ENCARGADO">
             <div class="firma-label">Nombre y Firma Encargado</div>
@@ -867,7 +864,7 @@ function renderPreview(doc){
 function renderItemsDoc(doc,secCls,hdrCls){
   const m=doc.items;const isCG=doc.tipo==='cot_cg';const cls=isCG?'cg':'sm';
   const bancoDatos=isCG
-    ?`Boleta de honorarios a nombre de:<br><strong>Carlos Guzmán Palma</strong> · RUT: 10.654.075-6<br>Email: equipos.medic@gmail.com`
+    ?`Cuenta corriente BancoEstado N° 38100137680<br><strong>Carlos Guzmán Palma</strong> · RUT: 10.654.075-6<br>Email: equipos.medic@gmail.com<br><span style="font-size:10px;color:var(--txs)">Validez: 15 días desde emisión</span>`
     :`Cuenta: Chequera electrónica BancoEstado N° 38172176582<br><strong>Soporte Médico&amp;Dental SPA</strong> · RUT: 77.009.054-7<br>Email: equipos.medic@gmail.com<br><span style="font-size:10px;color:var(--txs)">Validez: 15 días desde emisión</span>`;
 
   if(isCG){
@@ -970,11 +967,11 @@ async function guardar(){
   const nomFirmante=document.getElementById('iNombreFirmante')?.value.trim()||'';
 
   // Inyectar firma en el doc antes de generar PDF
-  const fw=document.querySelector('.firma-canvas-wrap');
-  if(fw&&firmaData&&!document.getElementById('firmaImgFinal')){
+  const cvEl=document.getElementById('firmaCanvas');
+  if(cvEl&&firmaData&&!document.getElementById('firmaImgFinal')){
     const img=document.createElement('img');img.id='firmaImgFinal';img.src=firmaData;
-    img.style.cssText='max-width:100%;border:1px solid #dce3ea;border-radius:6px;background:#fff;max-height:100px;';
-    const cvEl=fw.querySelector('#firmaCanvas');if(cvEl){cvEl.style.display='none';fw.insertBefore(img,cvEl);}
+    img.style.cssText='width:100%;border:1px solid #dce3ea;border-radius:4px;background:#fff;height:90px;object-fit:contain;display:block;';
+    cvEl.style.display='none';cvEl.parentElement.insertBefore(img,cvEl);
   }
   if(nomFirmante){
     const ni=document.getElementById('iNombreFirmante');
