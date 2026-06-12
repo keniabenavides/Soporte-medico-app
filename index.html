@@ -100,7 +100,7 @@ button{cursor:pointer;font-family:inherit}
 .doc-meta-body{padding:8px 10px;min-height:120px}
 .doc-fila{display:flex;gap:6px;margin-bottom:3px;font-size:12px;line-height:1.4}
 .doc-fila .k{color:var(--txs);min-width:60px;flex-shrink:0;font-size:11px}
-.doc-fila .v{font-weight:500;color:var(--tx)}
+.doc-fila .v{font-weight:500;color:var(--tx);word-break:break-word;overflow-wrap:break-word;flex:1;min-width:0}
 /* Sección título */
 .doc-sec{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;border-bottom:2px solid;padding:5px 10px 4px;margin:14px 0 8px;border-radius:3px 3px 0 0;break-after:avoid;page-break-after:avoid}
 .doc-sec.sm{color:#fff;background:var(--az);border-color:var(--az)}
@@ -1015,7 +1015,7 @@ async function guardar(){
     const lblArch=normPath(LABEL_A[doc.tipo]);
     const carpeta=`${fechaFmt} ${lblArch} N°${num}`;
     const archivo=`${lblArch} N°${num}.pdf`;
-    const ruta=`/Soporte Medico/${nomCli}/${anio}/${nombreMes}/${carpeta}/${archivo}`;
+    const ruta=`/Soporte Medico/Clientes/${nomCli}/${anio}/${nombreMes}/${carpeta}/${archivo}`;
     const rutaArg=dbxArg({path:ruta,mode:'overwrite',autorename:true,mute:false});
 
     const buf=await pdfBlob.arrayBuffer();
@@ -1079,7 +1079,7 @@ async function guardarEnExcel(doc,num){
     const XLSX=window.XLSX;
     if(!XLSX){console.warn('SheetJS no disponible');return;}
 
-    const wb=XLSX.read(new Uint8Array(xlsxBuf),{type:'array',cellDates:true});
+    const wb=XLSX.read(new Uint8Array(xlsxBuf),{type:'array',cellDates:true,cellStyles:true,bookVBA:true});
     const tipo=doc.tipo;
     const cli=doc.cliente;
     const equ=doc.equipo;
@@ -1138,7 +1138,7 @@ async function guardarEnExcel(doc,num){
     XLSX.utils.sheet_add_aoa(ws,[newRow],{origin:-1}); // append al final
 
     // Subir Excel modificado
-    const outBuf=XLSX.write(wb,{type:'array',bookType:'xlsm',compression:true});
+    const outBuf=XLSX.write(wb,{type:'array',bookType:'xlsm',compression:true,cellStyles:true});
     const upResp=await fetch('https://dropbox-proxy.kenia-benavides.workers.dev',{
       method:'POST',
       headers:{
